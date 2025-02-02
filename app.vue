@@ -1,42 +1,33 @@
+<script setup lang="ts">
+import { BasicShadowMap, SRGBColorSpace, NoToneMapping } from 'three';
+import { OrbitControls, Text3D } from '@tresjs/cientos';
+// Orbit controls by extending
+
+const gl = {
+  clearColor: '#82DBC5',
+  shadows: true,
+  alpha: false,
+  shadowMapType: BasicShadowMap,
+  outputColorSpace: SRGBColorSpace,
+  toneMapping: NoToneMapping,
+};
+</script>
+
 <template>
-  <TresCanvas shadows window-size clear-color="#000000">
-    <TresPerspectiveCamera 
-      :position="[5, 5, 5]"
-      :look-at="[0, 0, 0]"
-    />
-    <TresMesh 
-      :position="[0, 2, 0]"
-      receive-shadow
-      cast-shadow
-    >
-      <TresBoxGeometry />
-      <TresMeshStandardMaterial color="gray" />
-    </TresMesh>
-
-    <TresAmbientLight :args="['white', 2]" />
-    <TresDirectionalLight
-      :position="[4, 6, 0]"
-      :color="'cyan'"
-      :intensity="1"
-      cast-shadow
-    />
-
-    <TresMesh
-      cast-shadow
-      :position="[2, 4, 0]"
-    >
-      <TresSphereGeometry />
-      <TresMeshStandardMaterial color="pink" />
-    </TresMesh>
-
-    <TresMesh
-      receive-shadow
-      :rotation-x="-Math.PI / 2"
-    >
-      <TresPlaneGeometry :args="[10, 10]" />
-      <TresMeshStandardMaterial color="white" />
-    </TresMesh>
-
-    <TresAxesHelper :args="[5]" />
+  <TresCanvas v-bind="gl" window-size>
+    <TresPerspectiveCamera :position="[4, 3, 9]" />
+    <OrbitControls />
+    <Suspense>
+      <Text3D
+        :position="[0, 1, 0]"
+        text="naito.dev"
+        font="https://raw.githubusercontent.com/Tresjs/assets/main/fonts/FiraCodeRegular.json" 
+      >
+        <TresMeshNormalMaterial />
+      </Text3D>
+    </Suspense>
+    <TresDirectionalLight :position="[0, 2, 4]" :intensity="1.2" cast-shadow />
+    <TresGridHelper />
+    <TresAxesHelper :args="[5]"/>
   </TresCanvas>
 </template>
